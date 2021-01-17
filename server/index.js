@@ -2,48 +2,57 @@ const fs = require('fs');
 const path = require('path');
 
 function getAllProducts(fileJSON) {
-  return JSON.parse(
-    fs.readFileSync(fileJSON, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    })
-  );
+  try {
+    return JSON.parse(
+      fs.readFileSync(fileJSON, "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+
 }
 
 function getProductById(fileJSON, id) {
-  let productsList = JSON.parse(
-    fs.readFileSync(fileJSON, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    })
-  );
-  for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].id === id) {
-      return productsList[i];
-    }
+  let productsList;
+  try {
+    productsList = JSON.parse(
+      fs.readFileSync(fileJSON, "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return false;
   }
+  return productsList.find(item => item.id == id);
 }
 
 
-function addNewProduct(fileJSON, newProductId, newProductName, newProductPrice, newProductAmount) {
-  let productsList = JSON.parse(
-    fs.readFileSync(fileJSON, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    })
-  );
-  productsList.push({
-    id: newProductId,
-    product_name: newProductName,
-    product_price: newProductPrice,
-    product_amount: newProductAmount
-  });
+function addNewProduct(fileJSON, newProduct) {
+  let productsList;
+  try {
+    productsList = JSON.parse(
+      fs.readFileSync(fileJSON, "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+  productsList.push(newProduct);
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
@@ -52,26 +61,23 @@ function addNewProduct(fileJSON, newProductId, newProductName, newProductPrice, 
   });
 }
 
-function updateProductById(fileJSON, productid, newProductId, newProductName, newProductPrice, newProductAmount) {
-  let productsList = JSON.parse(
-    fs.readFileSync(fileJSON, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    })
-  );
-  for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].id === productid) {
-      productsList[i] = {
-        id: newProductId,
-        product_name: newProductName,
-        product_price: newProductPrice,
-        product_amount: newProductAmount
-      };
-      break;
-    }
+function updateProductById(fileJSON, productid, newProduct) {
+  let productsList;
+  try {
+    productsList = JSON.parse(
+      fs.readFileSync(fileJSON, "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return false;
   }
+  const index = productsList.findIndex(item => item.id == productid);
+  productsList[index] = newProduct;
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
@@ -81,21 +87,22 @@ function updateProductById(fileJSON, productid, newProductId, newProductName, ne
 }
 
 function deleteProduct(fileJSON, productid) {
-  let productsList = JSON.parse(
-    fs.readFileSync(fileJSON, "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-    })
-  );
-  for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].id === productid) {
-      let index = productsList.indexOf(productsList[i]);
-      productsList.splice(index, 1);
-      break;
-    }
+  let productsList;
+  try {
+    productsList = JSON.parse(
+      fs.readFileSync(fileJSON, "utf8", (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return false;
   }
+  const index = productsList.findIndex(item => item.id == productid);
+  productsList.splice(index, 1);
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
@@ -104,5 +111,12 @@ function deleteProduct(fileJSON, productid) {
   });
 }
 
-let JSONfileName = path.resolve(__dirname, 'products.json');
-console.log(getAllProducts(JSONfileName));
+const JSONfileName = path.resolve(__dirname, 'products.json');
+
+const newProduct = {
+  id: 4,
+  product_name: "Яйца",
+  product_price: 65,
+  product_amount: 50
+};
+console.log(deleteProduct(JSONfileName, 4));
