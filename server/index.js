@@ -15,7 +15,6 @@ function getAllProducts(fileJSON) {
     console.log(err);
     return false;
   }
-
 }
 
 function getProductById(fileJSON, id) {
@@ -35,7 +34,6 @@ function getProductById(fileJSON, id) {
   }
   return productsList.find(item => item.id == id);
 }
-
 
 function addNewProduct(fileJSON, newProduct) {
   let productsList;
