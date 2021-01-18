@@ -2,10 +2,11 @@
   "name": "fullstack-web-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "start": "nodemon server/index.js localhost 8080"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
     "url": "https://github.com/tyan-danya/fullstack-web-app/issues"
   },
   "homepage": "https://github.com/tyan-danya/fullstack-web-app#readme",
-  "devDependencies": {
+  "dependencies": {
     "express": "^4.17.1"
   }
 }
