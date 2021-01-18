@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const express = require("express");
+const app = express();
+
+const fs = require("fs");
+const path = require("path");
 
 function getAllProducts(fileJSON) {
   try {
@@ -32,7 +35,7 @@ function getProductById(fileJSON, id) {
     console.log(err);
     return false;
   }
-  return productsList.find(item => item.id == id);
+  return productsList.find((item) => item.id === Number(id));
 }
 
 function addNewProduct(fileJSON, newProduct) {
@@ -74,7 +77,7 @@ function updateProductById(fileJSON, productid, newProduct) {
     console.log(err);
     return false;
   }
-  const index = productsList.findIndex(item => item.id == productid);
+  const index = productsList.findIndex((item) => item.id === productid);
   productsList[index] = newProduct;
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
@@ -99,7 +102,7 @@ function deleteProduct(fileJSON, productid) {
     console.log(err);
     return false;
   }
-  const index = productsList.findIndex(item => item.id == productid);
+  const index = productsList.findIndex((item) => item.id === productid);
   productsList.splice(index, 1);
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
@@ -109,7 +112,7 @@ function deleteProduct(fileJSON, productid) {
   });
 }
 
-const JSONfileName = path.resolve(__dirname, 'products.json');
+const JSONfileName = path.resolve(__dirname, "products.json");
 
 const newProduct = {
   id: 4,
@@ -117,4 +120,14 @@ const newProduct = {
   product_price: 65,
   product_amount: 50
 };
-console.log(deleteProduct(JSONfileName, 4));
+//console.log(deleteProduct(JSONfileName, 4));
+
+app.get("/products", (req, res) => {
+  res.send(getAllProducts(JSONfileName));
+});
+
+app.get("/products/:id", (req, res) => {
+  res.send(getProductById(JSONfileName, req.params.id));
+});
+
+app.listen(8080);
