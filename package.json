@@ -20,5 +20,8 @@
   "homepage": "https://github.com/tyan-danya/fullstack-web-app#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "body-parser": "^1.19.0"
   }
 }

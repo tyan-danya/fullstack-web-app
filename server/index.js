@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 
 const fs = require("fs");
 const path = require("path");
@@ -10,7 +11,7 @@ function getAllProducts(fileJSON) {
       fs.readFileSync(fileJSON, "utf8", (err, data) => {
         if (err) {
           console.error(err);
-          return;
+          return false;
         }
       })
     );
@@ -27,7 +28,7 @@ function getProductById(fileJSON, id) {
       fs.readFileSync(fileJSON, "utf8", (err, data) => {
         if (err) {
           console.error(err);
-          return;
+          return false;
         }
       })
     );
@@ -45,7 +46,7 @@ function addNewProduct(fileJSON, newProduct) {
       fs.readFileSync(fileJSON, "utf8", (err, data) => {
         if (err) {
           console.error(err);
-          return;
+          return false;
         }
       })
     );
@@ -57,9 +58,10 @@ function addNewProduct(fileJSON, newProduct) {
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
-      return;
+      return false;
     }
   });
+  return true;
 }
 
 function updateProductById(fileJSON, productid, newProduct) {
@@ -69,7 +71,7 @@ function updateProductById(fileJSON, productid, newProduct) {
       fs.readFileSync(fileJSON, "utf8", (err, data) => {
         if (err) {
           console.error(err);
-          return;
+          return false;
         }
       })
     );
@@ -82,9 +84,10 @@ function updateProductById(fileJSON, productid, newProduct) {
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
-      return;
+      return false;
     }
   });
+  return true;
 }
 
 function deleteProduct(fileJSON, productid) {
@@ -94,7 +97,7 @@ function deleteProduct(fileJSON, productid) {
       fs.readFileSync(fileJSON, "utf8", (err, data) => {
         if (err) {
           console.error(err);
-          return;
+          return false;
         }
       })
     );
@@ -107,10 +110,16 @@ function deleteProduct(fileJSON, productid) {
   fs.writeFileSync(fileJSON, JSON.stringify(productsList), (err) => {
     if (err) {
       console.error(err);
-      return;
+      return false;
     }
   });
+  return true;
 }
+
+function checkId(id) {
+  return !isNaN(parseInt(id));
+}
+
 
 const JSONfileName = path.resolve(__dirname, "products.json");
 
@@ -120,14 +129,79 @@ const newProduct = {
   product_price: 65,
   product_amount: 50
 };
-//console.log(deleteProduct(JSONfileName, 4));
 
-app.get("/products", (req, res) => {
-  res.send(getAllProducts(JSONfileName));
+app.get("/product", function(request, response) {
+  response.send(getAllProducts(JSONfileName));
 });
 
-app.get("/products/:id", (req, res) => {
-  res.send(getProductById(JSONfileName, req.params.id));
+app.get("/product/:id", function(request, response) {
+  let id = Number(request.params.id);
+  if (!checkId(id)) {
+    response.status(482).send({
+      error: 'Incorrect id'
+    });
+    return;
+  }
+  let result = getProductById(JSONfileName, id);
+  if (result === undefined) {
+    response.status(483).send({
+      error: 'Product not found'
+    });
+  }
+  response.send();
+});
+
+app.post("/product", function(request, response) {
+  let result = addNewProduct(JSONfileName, request.body);
+  if (result) {
+    response.status(280).send({
+      result: 'ok'
+    });
+  } else {
+    response.status(481).send({
+      error: 'Failed to add product'
+    });
+  }
+});
+
+app.put("/product/:id", function(request, response) {
+  let id = Number(request.params.id);
+  if (!checkId(id)) {
+    response.status(482).send({
+      error: 'Incorrect id'
+    });
+    return;
+  }
+  let result = updateProductById(JSONfileName, id, request.body);
+  if (result) {
+    response.status(280).send({
+      result: 'ok'
+    });
+  } else {
+    response.status(481).send({
+      error: 'Failed to update product'
+    });
+  }
+});
+
+app.delete("/product/:id", function(request, response) {
+  let id = Number(request.params.id);
+  if (!checkId(id)) {
+    response.status(482).send({
+      error: 'Incorrect id'
+    });
+    return;
+  }
+  let result = deleteProduct(JSONfileName, id);
+  if (result) {
+    response.status(280).send({
+      result: 'ok'
+    });
+  } else {
+    response.status(481).send({
+      error: 'Failed to delete product'
+    });
+  }
 });
 
 app.listen(8080);
