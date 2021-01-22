@@ -1,0 +1,11 @@
+.product-table {
+  border-collapse: collapse;
+}
+
+.product-table-row-cell {
+  border: 1px solid grey;
+}
+
+.product-table-row-cell__input {
+  border: none;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <script class="table-template" type="text/x-handlebars-template">
+    <tr class="product-table-row product-table-row--header">
+      <th class="product-table-row-cell product-table-row-cell--header">Наименование</th>
+      <th class="product-table-row-cell product-table-row-cell--header">Количество</th>
+      <th class="product-table-row-cell product-table-row-cell--header">Цена</th>
+      <th class="product-table-row-cell product-table-row-cell--header">Стоимость</th>
+    </tr>
+    <tr class="product-table-row">
+      {{#each productsList}}
+      <tr class="product-table-row">
+        <th class="product-table-row-cell">{{this.name}}</th>
+        <th class="product-table-row-cell">
+          <input type="text" class="product-table-row-cell__input product-table-row-cell__input--count" data-id="{{id}}" value="{{this.count}}" readonly>
+        </th>
+        <th class="product-table-row-cell">
+          <input type="text" class="product-table-row-cell__input product-table-row-cell__input--price" data-id="{{id}}" value="{{this.priceForOne}}" readonly>
+        </th>
+        <th class="product-table-row-cell">{{this.totalPrice}}</th>
+      </tr>
+      {{/each}}
+    </tr>
+    <tr class="product-table-row product-table-row--result">
+      <th colspan="3" class="product-table-row-cell product-table-row-cell--result">Итого</th>
+      <th class="product-table-row-cell product-table-row-cell--result">{{result}}</th>
+    </tr>
+  </script>
+  <table class="product-table"></table>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js " integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw==" crossorigin=" anonymous " defer></script>
+  <script src="js/script.js" type="module"></script>
+</body>
+
+</html>
