@@ -5,7 +5,12 @@ import {
   calculateTotalPrice,
   getAllTotalPrice,
   setCount,
-  setPrice
+  setPrice,
+  addEventDblClick,
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+  addProduct
 } from './functions.js';
 
 function createObservableArray(array, callback) {
@@ -27,14 +32,8 @@ function createObservableArray(array, callback) {
   });
 }
 
-function addEventDblClick(element) {
-  element.addEventListener('dblclick', (event) => {
-    event.target.readOnly = false;
-  })
-}
-
-window.onload = function onload() {
-  function updateUI() {
+window.onload = async function onload() {
+  async function updateUI() {
     const tableTemplateSource = document.querySelector(".table-template").innerHTML;
     const tableTemplate = Handlebars.compile(tableTemplateSource);
     const result = getAllTotalPrice(productsList);
@@ -57,19 +56,49 @@ window.onload = function onload() {
           } else if (input.classList.contains('product-table-row-cell__input--price')) {
             setPrice(productsList[productsListIndex], Number(event.target.value));
           }
+          delete productsList[productsListIndex].totalPrice;
+          updateProduct(productsList[productsListIndex].id, productsList[productsListIndex]);
           calculateTotalPrice(productsList[productsListIndex]);
-          console.log(1);
         }
       })
     });
+    const deleteImages = document.querySelectorAll(".product-table-row-cell__button--delete");
+    deleteImages.forEach((element) => {
+      element.addEventListener('click', (event) => {
+        const elementId = Number(element.getAttribute('data-id'));
+        let productsListIndex;
+        productsList.forEach((element, i) => {
+          if (element.id === elementId) {
+            productsListIndex = i;
+          }
+        });
+        deleteProduct(productsList[productsListIndex].id);
+        productsList.splice(productsListIndex, 1);
+      });
+    });
+    const addButton = document.querySelector(".product-table-row-cell--add");
+    addButton.addEventListener('click', (event) => {
+      let newRow = document.createElement("tr");
+      newRow.innerHTML = '<th class="product-table-row-cell"></th>' +
+        '<th class="product-table-row-cell">' +
+        '<input type="text" class="product-table-row-cell__input product-table-row-cell__input--count" data-id="" value="" readonly>' +
+        '</th>' +
+        '<th class="product-table-row-cell">' +
+        '<input type="text" class="product-table-row-cell__input product-table-row-cell__input--price" data-id="" value="" readonly>' +
+        '</th>' +
+        '<th class="product-table-row-cell"></th>' +
+        '<th class="product-table-row-cell product-table-row-cell--save">' +
+        '<div class="product-table-row-cell__button product-table-row-cell__button--save" data-id="">&#10004;</div>' +
+        '</th>';
 
+      let tableRows = document.querySelectorAll(".product-table-row");
+      let tableRowsAmount = tableRows.length;
+      let addRow = tableRows[tableRowsAmount - 2];
+      addRow.style.display = "none";
+      addRow.parentNode.insertBefore(newRow, addRow);
+    });
   }
-
-  let productsList = [
-    { id: 1, name: 'Молоко', count: 40, priceForOne: 50 },
-    { id: 2, name: 'Хлеб', count: 100, priceForOne: 20 },
-    { id: 3, name: 'Лук', count: 200, priceForOne: 5 }
-  ];
+  let productsList = await getAllProducts();
   for (let i = 0; i < productsList.length; i++) {
     calculateTotalPrice(productsList[i]);
   }

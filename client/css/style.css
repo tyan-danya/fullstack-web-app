@@ -1,11 +1,39 @@
+body {
+  font-size: 20px;
+}
+
 .product-table {
   border-collapse: collapse;
 }
 
 .product-table-row-cell {
   border: 1px solid grey;
+  padding: 15px;
 }
 
 .product-table-row-cell__input {
+  font-size: 20px;
   border: none;
+}
+
+.product-table-row-cell__button--delete {
+  height: 40px;
+  width: 35px;
+  cursor: pointer;
+  background-image: url("../images/delete.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.product-table-row-cell__button--delete:hover {
+  background-image: url("../images/delete--active.png");
+}
+
+.product-table-row-cell--delete {
+  border: none;
+}
+
+.product-table-row-cell--add {
+  font-size: 30px;
+  cursor: pointer;
 }

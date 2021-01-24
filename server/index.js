@@ -5,6 +5,25 @@ app.use(express.json());
 const fs = require("fs");
 const path = require("path");
 
+app.use(function(req, res, next) {
+  /*var origins = [
+    'http://example.com',
+    'http://www.example.com'
+  ];
+
+  for (var i = 0; i < origins.length; i++) {
+    var origin = origins[i];
+
+    if (req.headers.origin.indexOf(origin) > -1) {
+      res.header('Access-Control-Allow-Origin', req.headers.origin);
+    }
+  }*/
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 function getAllProducts(fileJSON) {
   try {
     return JSON.parse(
@@ -148,7 +167,7 @@ app.get("/product/:id", function(request, response) {
       error: 'Product not found'
     });
   }
-  response.send();
+  response.send(result);
 });
 
 app.post("/product", function(request, response) {
