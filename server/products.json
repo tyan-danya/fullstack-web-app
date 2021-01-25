@@ -1,1 +1,1 @@
-[{"id":1,"product_name":"Молоко","product_amount":40,"product_price":50},{"id":2,"product_name":"Хлеб","product_price":20,"product_amount":50},{"id":3,"product_name":"Лук","product_price":15,"product_amount":150}]
+[{"id":1,"product_name":"Молочко","product_amount":40,"product_price":50},{"id":3,"product_name":"Лук","product_price":15,"product_amount":149},{"id":4,"product_name":"Хлеб","product_amount":"50","product_price":"15"}]

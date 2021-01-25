@@ -139,6 +139,9 @@ function checkId(id) {
   return !isNaN(parseInt(id));
 }
 
+function checkProduct(product) {
+  return product.product_name !== "" && product.product_amount !== "" && product.product_price !== "";
+}
 
 const JSONfileName = path.resolve(__dirname, "products.json");
 
@@ -171,7 +174,14 @@ app.get("/product/:id", function(request, response) {
 });
 
 app.post("/product", function(request, response) {
-  let result = addNewProduct(JSONfileName, request.body);
+  const product = request.body;
+  if (!checkProduct(product)) {
+    response.status(483).send({
+      error: 'Invalid product'
+    });
+    return;
+  }
+  let result = addNewProduct(JSONfileName, product);
   if (result) {
     response.status(280).send({
       result: 'ok'
@@ -184,6 +194,13 @@ app.post("/product", function(request, response) {
 });
 
 app.put("/product/:id", function(request, response) {
+  const product = request.body;
+  if (!checkProduct(product)) {
+    response.status(483).send({
+      error: 'Invalid product'
+    });
+    return;
+  }
   let id = Number(request.params.id);
   if (!checkId(id)) {
     response.status(482).send({
@@ -191,7 +208,7 @@ app.put("/product/:id", function(request, response) {
     });
     return;
   }
-  let result = updateProductById(JSONfileName, id, request.body);
+  let result = updateProductById(JSONfileName, id, product);
   if (result) {
     response.status(280).send({
       result: 'ok'
@@ -223,4 +240,4 @@ app.delete("/product/:id", function(request, response) {
   }
 });
 
-app.listen(8080);
+app.listen(3000);

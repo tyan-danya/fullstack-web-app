@@ -1,12 +1,17 @@
 {
   "name": "fullstack-web-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "front",
   "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server/index.js",
-    "start": "nodemon server/index.js localhost 8080"
+    "prebuild": "npm run lint:js && npm run lint:css",
+    "build": "webpack",
+    "watch": "npm-watch",
+    "lint:js": "eslint src/*/*.js",
+    "lint:css": "stylelint src/*/*.css",
+    "start:dev": "webpack serve",
+    "dev": "npm run start:dev && npm run watch"
   },
   "repository": {
     "type": "git",
@@ -20,5 +25,29 @@
   "homepage": "https://github.com/tyan-danya/fullstack-web-app#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.3.3",
+    "npm-watch": "^0.7.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "prettier": "^2.2.1",
+    "regenerator-runtime": "^0.13.7",
+    "stylelint": "^13.8.0",
+    "stylelint-config-standard": "^20.0.0",
+    "terser-webpack-plugin": "^5.0.3",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }

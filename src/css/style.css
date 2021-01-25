@@ -1,0 +1,52 @@
+body {
+  font-size: 20px;
+}
+
+.product-table {
+  border-collapse: collapse;
+}
+
+.product-table-row-cell {
+  border: 1px solid grey;
+  padding: 15px;
+}
+
+.product-table-row-cell__input {
+  font-size: 20px;
+  border: none;
+}
+
+.product-table-row-cell-add__input {
+  font-size: 20px;
+  border: none;
+}
+
+.product-table-row-cell__button--delete {
+  height: 40px;
+  width: 35px;
+  cursor: pointer;
+  background-image: url(../images/delete.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.product-table-row-cell__button--delete:hover {
+  background-image: url(../images/deleteActive.png);
+}
+
+.product-table-row-cell--button {
+  border: none;
+}
+
+.product-table-row-cell--add-button {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.product-table-row--add {
+  display: none;
+}
+
+.product-table-row-cell__button--save {
+  cursor: pointer;
+}
