@@ -76,35 +76,65 @@ export function addEventDblClick(element) {
 }
 
 export async function getAllProducts() {
-  const response = await fetch('http://localhost:3000/product');
-  return await response.json();
+  try {
+    const response = await fetch('http://localhost:3000/product');
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+    return {
+      error: "Server error. Couldn't get the list of products"
+    };
+  }
+
 }
 
 export async function updateProduct(id, newProduct) {
-  const response = await fetch('http://localhost:3000/product/' + id, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(newProduct)
-  });
-  return await response.json();
+  try {
+    const response = await fetch('http://localhost:3000/product/' + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(newProduct)
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+    return {
+      error: "Failed to update product"
+    };
+  }
+
 }
 
 export async function deleteProduct(id) {
-  const response = await fetch('http://localhost:3000/product/' + id, {
-    method: 'DELETE'
-  });
-  return await response.json();
+  try {
+    const response = await fetch('http://localhost:3000/product/' + id, {
+      method: 'DELETE'
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+    return {
+      error: "Failed to delete product"
+    };
+  }
 }
 
 export async function addProduct(newProduct) {
-  const response = await fetch('http://localhost:3000/product', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(newProduct)
-  });
-  return await response.json();
+  try {
+    const response = await fetch('http://localhost:3000/product', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(newProduct)
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+    return {
+      error: "Failed to add product"
+    };
+  }
 }

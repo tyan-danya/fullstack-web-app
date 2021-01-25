@@ -38,6 +38,7 @@ window.onload = async function onload() {
     const tableTemplateSource = document.querySelector(".table-template").innerHTML;
     const tableTemplate = Handlebars.compile(tableTemplateSource);
     const resultTemp = getAllTotalPrice(productsList);
+    console.log(resultTemp);
     const tableHTML = tableTemplate({ productsList, resultTemp });
     document.querySelector(".product-table").innerHTML = tableHTML;
     const inputs = document.querySelectorAll(".product-table-row-cell__input");
@@ -136,7 +137,12 @@ window.onload = async function onload() {
 
     });
   }
-  let productsList = await getAllProducts();
+  const result = await getAllProducts();
+  if (result.error !== undefined) {
+    alert(result.error);
+    return;
+  }
+  let productsList = result;
   for (let i = 0; i < productsList.length; i++) {
     calculateTotalPrice(productsList[i]);
   }
